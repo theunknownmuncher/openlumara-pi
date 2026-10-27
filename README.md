@@ -83,6 +83,25 @@ OpenLumara restarts.
 - Extension dialogs (`extension_ui_request`) from pi extensions are ignored; pi's RPC mode
   degrades them the same way other non-TUI clients do.
 
+## Tests
+
+From the OpenLumara repo root (the suite reuses the repo's shared test harness and
+path-isolating fixtures):
+
+```bash
+pytest user_modules/pi/tests
+```
+
+The fast tests drive the real OpenLumara pipeline (real `ToolLoader` registration + real
+`ToolcallManager.process()` dispatch) with a scripted pi RPC layer, so they need no pi provider
+credentials. To additionally drive a *real, authenticated* pi through the same pipeline, opt in:
+
+```bash
+PI_LIVE=1 pytest user_modules/pi/tests -k real_pi
+```
+
+(`PI_LIVE_ARGS` optionally holds a JSON list of extra pi CLI args, e.g. provider/model flags.)
+
 ## License
 
 GPL-3.0-or-later (see `LICENSE`). pi itself is a separate project
